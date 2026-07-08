@@ -1,0 +1,7 @@
+# Windows / OS clutter we never want in the project
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Your downloaded Hub backups (they belong in Downloads, not here)
+hub-backup-*.json

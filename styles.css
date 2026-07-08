@@ -1,0 +1,360 @@
+/* ============================================================
+   Hub — styles
+   Colors live in CSS variables so the whole look can be changed
+   from one place. Dark mode switches automatically with your
+   system setting.
+   ============================================================ */
+
+:root {
+  --bg: #f6f1ea;
+  --card: #fffdf9;
+  --ink: #2e2822;
+  --muted: #8a8177;
+  --line: #e8e0d5;
+  --accent: #bc5f38;
+  --accent-soft: #f5e3da;
+  --good: #4c8b5d;
+  --shadow: 0 1px 3px rgba(46, 40, 34, 0.08), 0 4px 16px rgba(46, 40, 34, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1b1815;
+    --card: #262220;
+    --ink: #ece5dc;
+    --muted: #9a9086;
+    --line: #3a342f;
+    --accent: #e0855c;
+    --accent-soft: #3d2c24;
+    --good: #7cb98d;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Phone-first: one comfortable column, centered on big screens. */
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+}
+
+/* ---------- header ---------- */
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 4px 16px;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.streak {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-size: 0.95rem;
+}
+
+/* ---------- cards ---------- */
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.card h2 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin: 0 0 12px;
+  font-weight: 600;
+}
+
+.muted { color: var(--muted); margin: 2px 0 0; }
+.small { font-size: 0.85rem; }
+
+/* ---------- mood row ---------- */
+
+.mood-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.mood-btn {
+  flex: 1;
+  font-size: 1.6rem;
+  line-height: 1;
+  padding: 10px 0 8px;
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  filter: grayscale(0.7);
+  opacity: 0.55;
+  transition: transform 0.1s ease, opacity 0.1s ease;
+}
+
+.mood-btn:hover { transform: scale(1.12); opacity: 0.9; }
+
+.mood-btn.selected {
+  filter: none;
+  opacity: 1;
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  transform: scale(1.08);
+}
+
+/* ---------- habits ---------- */
+
+.habit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.habit-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.habit-list label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  cursor: pointer;
+  padding: 7px 6px;
+  border-radius: 10px;
+  min-height: 40px;
+}
+
+.habit-list label:hover { background: var(--accent-soft); }
+
+.habit-list input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--good);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.habit-list li.done .habit-name {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.habit-edit-row input[type="text"] {
+  flex: 1;
+  font-size: 1rem;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.habit-tools {
+  margin-top: 6px;
+  display: flex;
+  gap: 14px;
+}
+
+/* ---------- note ---------- */
+
+.note {
+  width: 100%;
+  margin-top: 12px;
+  font-size: 1rem;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* ---------- tasks ---------- */
+
+#task-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+#new-task {
+  flex: 1;
+  font-size: 1rem;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.add-btn {
+  width: 46px;
+  font-size: 1.4rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+}
+
+.add-btn:hover { filter: brightness(1.1); }
+
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.task-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 4px;
+  border-bottom: 1px solid var(--line);
+  min-height: 44px;
+}
+
+.task-list li:last-child { border-bottom: none; }
+
+.tick {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+  color: transparent;
+  padding: 0;
+}
+
+.tick:hover { border-color: var(--good); }
+
+li.done .tick {
+  background: var(--good);
+  border-color: var(--good);
+  color: #fff;
+}
+
+.task-text { flex: 1; overflow-wrap: anywhere; }
+
+li.done .task-text {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.del {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 6px 8px;
+  border-radius: 8px;
+  opacity: 0.6;
+}
+
+.del:hover { opacity: 1; color: var(--accent); background: var(--accent-soft); }
+
+/* ---------- week strip ---------- */
+
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  text-align: center;
+}
+
+.week .day {
+  padding: 8px 2px;
+  border-radius: 10px;
+}
+
+.week .day.today {
+  background: var(--accent-soft);
+}
+
+.week .dow {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.week .mood {
+  font-size: 1.25rem;
+  min-height: 1.5rem;
+}
+
+.week .mood.empty { color: var(--line); }
+
+.week .habits-done {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+/* ---------- buttons & footer ---------- */
+
+.link-btn {
+  border: none;
+  background: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 4px 2px;
+}
+
+.link-btn:hover { text-decoration: underline; }
+
+.foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 4px 0;
+}
+
+button:focus-visible, input:focus-visible, label:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+input:focus { outline: 2px solid var(--accent); border-color: transparent; }

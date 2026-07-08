@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hub</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app">
+
+    <header class="top">
+      <div>
+        <h1 id="greeting">Hello</h1>
+        <p id="date-line" class="muted"></p>
+      </div>
+      <div id="streak" class="streak" title="Days in a row you've checked in">🔥 0</div>
+    </header>
+
+    <!-- Module 1a: the daily check-in. Ten seconds a day; it adds up. -->
+    <section class="card">
+      <h2>Daily check-in</h2>
+      <div id="mood-row" class="mood-row" role="group" aria-label="How are you feeling today?"></div>
+      <ul id="habit-list" class="habit-list"></ul>
+      <div class="habit-tools">
+        <button id="edit-habits" class="link-btn" type="button">Edit habits</button>
+      </div>
+      <input id="note" class="note" placeholder="One line about today…" maxlength="200" autocomplete="off">
+    </section>
+
+    <!-- Module 1b: tasks. Open tasks stick around until you finish them. -->
+    <section class="card">
+      <h2>Tasks</h2>
+      <form id="task-form" autocomplete="off">
+        <input id="new-task" placeholder="Add a task…" aria-label="New task">
+        <button type="submit" class="add-btn" aria-label="Add task">+</button>
+      </form>
+      <ul id="task-list" class="task-list"></ul>
+      <p id="task-empty" class="muted small">Nothing here — add whatever is on your plate.</p>
+    </section>
+
+    <!-- A small look back: the last 7 days of check-ins. -->
+    <section class="card">
+      <h2>Last 7 days</h2>
+      <div id="week" class="week"></div>
+    </section>
+
+    <footer class="foot">
+      <span class="muted small">Hub · made by Megan (with Claude)</span>
+      <span class="small">
+        <button id="export" class="link-btn" type="button">Backup</button>
+        ·
+        <button id="import" class="link-btn" type="button">Restore</button>
+      </span>
+      <input type="file" id="import-file" accept="application/json" hidden>
+    </footer>
+
+  </main>
+
+  <script src="storage.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
