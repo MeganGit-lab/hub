@@ -1,11 +1,15 @@
 /* ============================================================
-   Hub — app.js (the interface)
+   Hub — app.js (the Today tab + the glue)
 
    How it works, in one breath: there is one `data` object
    (loaded by storage.js). Whenever you do something — tick a
    habit, add a task — we change `data`, save it, and redraw
    the screen from scratch. Simple to reason about, and plenty
    fast at this size.
+
+   The app is split by tab: this file owns Today and the tab
+   bar; reminders.js and habits.js own their tabs. They all
+   share the one `data` object and the helpers defined here.
    ============================================================ */
 
 // Your name — change it and refresh!
@@ -14,7 +18,6 @@ const OWNER = "Megan";
 const MOODS = ["😞", "😕", "😐", "🙂", "😄"];
 
 let data = Storage.load();
-let editingHabits = false; // are we in "edit habits" mode right now?
 
 const $ = (sel) => document.querySelector(sel);
 
@@ -94,64 +97,24 @@ function renderHabits() {
 
   data.habits.forEach((habit) => {
     const li = document.createElement("li");
-
-    if (editingHabits) {
-      // Edit mode: rename or remove.
-      li.className = "habit-edit-row";
-      const input = document.createElement("input");
-      input.type = "text";
-      input.value = habit.name;
-      input.setAttribute("aria-label", "Habit name");
-      input.onchange = () => {
-        habit.name = input.value.trim() || habit.name;
-        Storage.save(data);
-      };
-      const del = document.createElement("button");
-      del.className = "del";
-      del.textContent = "✕";
-      del.setAttribute("aria-label", `Remove habit ${habit.name}`);
-      del.onclick = () => {
-        data.habits = data.habits.filter((x) => x.id !== habit.id);
-        saveAndRender();
-      };
-      li.append(input, del);
-    } else {
-      // Normal mode: a checkbox for today.
-      const done = !!rec.habits[habit.id];
-      li.className = done ? "done" : "";
-      const label = document.createElement("label");
-      const box = document.createElement("input");
-      box.type = "checkbox";
-      box.checked = done;
-      box.onchange = () => {
-        rec.habits[habit.id] = box.checked;
-        saveAndRender();
-      };
-      const name = document.createElement("span");
-      name.className = "habit-name";
-      name.textContent = habit.name;
-      label.append(box, name);
-      li.appendChild(label);
-    }
-    list.appendChild(li);
-  });
-
-  const btn = $("#edit-habits");
-  btn.textContent = editingHabits ? "✓ Done editing" : "Edit habits";
-
-  // In edit mode, offer an "add habit" row.
-  if (editingHabits) {
-    const li = document.createElement("li");
-    const add = document.createElement("button");
-    add.className = "link-btn";
-    add.textContent = "+ Add a habit";
-    add.onclick = () => {
-      data.habits.push({ id: makeId(), name: "New habit" });
+    const done = !!rec.habits[habit.id];
+    li.className = done ? "done" : "";
+    const label = document.createElement("label");
+    if (habit.why) label.title = habit.why; // hover a habit to see your why
+    const box = document.createElement("input");
+    box.type = "checkbox";
+    box.checked = done;
+    box.onchange = () => {
+      rec.habits[habit.id] = box.checked;
       saveAndRender();
     };
-    li.appendChild(add);
+    const name = document.createElement("span");
+    name.className = "habit-name";
+    name.textContent = habit.name;
+    label.append(box, name);
+    li.appendChild(label);
     list.appendChild(li);
-  }
+  });
 }
 
 function renderNote() {
@@ -265,7 +228,8 @@ function importData(file) {
         return;
       }
       if (confirm("Replace everything in Hub with this backup?")) {
-        data = incoming;
+        // Older backups may predate newer features — fill in the gaps.
+        data = Storage.normalize(incoming);
         saveAndRender();
       }
     } catch {
@@ -275,15 +239,41 @@ function importData(file) {
   reader.readAsText(file);
 }
 
+/* ---------- tabs ---------- */
+
+// One .page div is visible at a time; the bottom bar picks which.
+function switchTab(name) {
+  document.querySelectorAll(".page").forEach((p) => {
+    p.classList.toggle("active", p.id === "page-" + name);
+  });
+  document.querySelectorAll(".tab-btn").forEach((b) => {
+    const on = b.dataset.tab === name;
+    b.classList.toggle("active", on);
+    if (on) b.setAttribute("aria-current", "page");
+    else b.removeAttribute("aria-current");
+  });
+  window.scrollTo(0, 0);
+}
+
+document.querySelectorAll(".tab-btn").forEach((b) => {
+  b.onclick = () => switchTab(b.dataset.tab);
+});
+
 /* ---------- wiring & startup ---------- */
 
+// Redraw every tab from `data`. At this size that's instant, and
+// it means no tab can ever show stale information.
 function render() {
   renderHeader();
+  renderTodayReminders();
   renderMood();
   renderHabits();
   renderNote();
   renderTasks();
   renderWeek();
+  renderRemindersPage();
+  renderReminderBadge();
+  renderHabitsPage();
 }
 
 $("#task-form").addEventListener("submit", (e) => {
@@ -311,10 +301,7 @@ $("#note").addEventListener("input", () => {
 // When you leave the note, refresh the streak/week display.
 $("#note").addEventListener("blur", render);
 
-$("#edit-habits").addEventListener("click", () => {
-  editingHabits = !editingHabits;
-  render();
-});
+$("#goto-habits").addEventListener("click", () => switchTab("habits"));
 
 $("#export").addEventListener("click", exportData);
 $("#import").addEventListener("click", () => $("#import-file").click());
@@ -333,4 +320,6 @@ window.addEventListener("focus", () => {
   }
 });
 
+setupReminders();
+setupHabits();
 render();

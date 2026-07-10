@@ -6,9 +6,10 @@
 
    {
      version: 1,
-     tasks:  [ { id, text, done, createdDay, doneDay } ],
-     days:   { "2026-07-08": { mood: 0-4 or null, habits: {habitId: true}, note: "" } },
-     habits: [ { id, name } ]
+     tasks:     [ { id, text, done, createdDay, doneDay } ],
+     reminders: [ { id, text, date: "YYYY-MM-DD" or "", done, doneDay } ],
+     days:      { "2026-07-08": { mood: 0-4 or null, habits: {habitId: true}, note: "" } },
+     habits:    [ { id, name, why } ]
    }
 
    Keeping ALL reading/writing in this file means that later,
@@ -28,6 +29,7 @@ const Storage = {
     return {
       version: 1,
       tasks: [],
+      reminders: [],
       days: {},
       habits: [
         { id: makeId(), name: "Move my body" },
@@ -46,12 +48,19 @@ const Storage = {
       if (!data || !Array.isArray(data.tasks) || typeof data.days !== "object") {
         return this.defaultData();
       }
-      if (!Array.isArray(data.habits)) data.habits = [];
-      return data;
+      return this.normalize(data);
     } catch (err) {
       console.warn("Could not read saved data, starting fresh.", err);
       return this.defaultData();
     }
+  },
+
+  // Fill in any keys this version of Hub expects but an older
+  // save (or an old backup file being restored) might not have.
+  normalize(data) {
+    if (!Array.isArray(data.habits)) data.habits = [];
+    if (!Array.isArray(data.reminders)) data.reminders = [];
+    return data;
   },
 
   save(data) {

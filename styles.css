@@ -14,6 +14,8 @@
   --accent: #bc5f38;
   --accent-soft: #f5e3da;
   --good: #4c8b5d;
+  --bad: #b3453a;
+  --bad-soft: #f7e1de;
   --shadow: 0 1px 3px rgba(46, 40, 34, 0.08), 0 4px 16px rgba(46, 40, 34, 0.06);
 }
 
@@ -27,6 +29,8 @@
     --accent: #e0855c;
     --accent-soft: #3d2c24;
     --good: #7cb98d;
+    --bad: #e08072;
+    --bad-soft: #4a2b26;
     --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   }
 }
@@ -44,6 +48,9 @@ body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   line-height: 1.45;
   -webkit-font-smoothing: antialiased;
+  /* Leave room so the fixed tab bar never covers the footer.
+     env(safe-area-inset-bottom) clears the iPhone home bar. */
+  padding-bottom: calc(66px + env(safe-area-inset-bottom));
 }
 
 /* Phone-first: one comfortable column, centered on big screens. */
@@ -176,16 +183,6 @@ h1 {
   text-decoration: line-through;
 }
 
-.habit-edit-row input[type="text"] {
-  flex: 1;
-  font-size: 1rem;
-  padding: 8px 10px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--bg);
-  color: var(--ink);
-}
-
 .habit-tools {
   margin-top: 6px;
   display: flex;
@@ -207,13 +204,13 @@ h1 {
 
 /* ---------- tasks ---------- */
 
-#task-form {
+#task-form, #reminder-form, #habit-form {
   display: flex;
   gap: 8px;
   margin-bottom: 8px;
 }
 
-#new-task {
+#new-task, #new-reminder, #new-habit {
   flex: 1;
   font-size: 1rem;
   padding: 11px 12px;
@@ -351,6 +348,189 @@ li.done .task-text {
   align-items: center;
   padding: 6px 4px 0;
 }
+
+/* ---------- tab pages & bottom tab bar ---------- */
+
+.page { display: none; }
+.page.active { display: block; }
+
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+}
+
+.tab-btn {
+  position: relative;
+  flex: 1;
+  max-width: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 1.3rem;
+  line-height: 1;
+  padding: 7px 4px 6px;
+  border: none;
+  border-radius: 12px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  filter: grayscale(1);
+  opacity: 0.7;
+}
+
+.tab-btn span { font-size: 0.68rem; letter-spacing: 0.02em; }
+
+.tab-btn.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+  filter: none;
+  opacity: 1;
+}
+
+/* The little count on the ⏰ tab when something is due. */
+.badge {
+  position: absolute;
+  top: 2px;
+  right: 16%;
+  min-width: 17px;
+  height: 17px;
+  line-height: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+/* ---------- reminders ---------- */
+
+.due-card { border-color: var(--accent); }
+
+.date-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.date-row input[type="date"] {
+  flex: 1;
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.group-title {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 600;
+  margin: 14px 0 2px;
+}
+
+.group-title:first-child { margin-top: 0; }
+.group-title.overdue { color: var(--bad); }
+
+.rem-date {
+  font-size: 0.72rem;
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.rem-date.overdue {
+  background: var(--bad-soft);
+  color: var(--bad);
+}
+
+/* ---------- habits tab ---------- */
+
+.hint { margin: 0 0 12px; }
+
+.habit-manage {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.habit-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.habit-card .row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* The name and the why are quiet inputs — click to edit in place. */
+.h-name {
+  flex: 1;
+  font: inherit;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  padding: 4px 2px;
+  border-radius: 8px;
+}
+
+.h-why {
+  width: 100%;
+  font: inherit;
+  font-size: 0.85rem;
+  font-style: italic;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  padding: 2px;
+  margin-top: 2px;
+}
+
+.h-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.dots { display: flex; gap: 4px; }
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.dot.filled { background: var(--good); }
+
+.h-streak { font-size: 0.78rem; color: var(--muted); }
+
+/* ---------- focus ---------- */
 
 button:focus-visible, input:focus-visible, label:focus-within {
   outline: 2px solid var(--accent);

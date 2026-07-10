@@ -26,8 +26,12 @@ Everything is saved inside the browser (localStorage) — not in this folder. Tw
 |---|---|
 | `index.html` | The structure of the page — what exists |
 | `styles.css` | How it looks — colors, spacing, dark mode |
-| `app.js` | How it behaves — every button and interaction |
+| `app.js` | The Today tab, the bottom tab bar, and shared helpers |
+| `reminders.js` | The ⏰ Reminders tab (and the "Don't forget" card on Today) |
+| `habits.js` | The 🌱 Habits tab — manage habits, whys, streaks |
 | `storage.js` | How data is saved — the only file that touches storage |
+
+That's the module pattern: each new tab is its own small file. Money and Journal will join the same way.
 
 Change your name in the greeting at the top of `app.js` (`const OWNER = ...`).
 
@@ -35,6 +39,7 @@ Change your name in the greeting at the top of `app.js` (`const OWNER = ...`).
 
 - [x] **v1 — Today page**: tasks, mood, habits, daily note, streak, 7-day view *(July 8, 2026)*
 - [x] **Phase 2a — Get it online**: Hub lives at <https://megangit-lab.github.io/hub/> (GitHub Pages, free). Learned git: the project's history now lives at <https://github.com/MeganGit-lab/hub> *(July 9, 2026)*
+- [x] **v1.1 — Tabs**: bottom tab bar. ⏰ Reminders (dated reminders that surface on Today and count on the tab button) and 🌱 Habits (add/rename/remove, a "why" for each, 7-day dots, per-habit streaks) *(July 10, 2026)*
 - [ ] **Phase 2b — Cloud sync**: one shared account so phone + PC see the same data automatically
 - [ ] **Module 2 — Money**: quick expense logging, monthly picture
 - [ ] **Module 3 — Journal**: the daily one-liner grows into real entries, searchable
@@ -44,7 +49,8 @@ Change your name in the greeting at the top of `app.js` (`const OWNER = ...`).
 
 *(When a shiny new idea appears, write it here instead of abandoning ship. Review when bored.)*
 
-- …
+- Real push notifications — the phone pings you even when Hub is closed. Needs cloud machinery (a service worker + a push server), so it pairs naturally with Phase 2b.
+- A month-grid calendar view of reminders (the list groups cover daily use for now).
 
 ## Publishing a change (the git ritual)
 

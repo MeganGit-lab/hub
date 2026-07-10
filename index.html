@@ -18,33 +18,83 @@
       <div id="streak" class="streak" title="Days in a row you've checked in">🔥 0</div>
     </header>
 
-    <!-- Module 1a: the daily check-in. Ten seconds a day; it adds up. -->
-    <section class="card">
-      <h2>Daily check-in</h2>
-      <div id="mood-row" class="mood-row" role="group" aria-label="How are you feeling today?"></div>
-      <ul id="habit-list" class="habit-list"></ul>
-      <div class="habit-tools">
-        <button id="edit-habits" class="link-btn" type="button">Edit habits</button>
-      </div>
-      <input id="note" class="note" placeholder="One line about today…" maxlength="200" autocomplete="off">
-    </section>
+    <!-- ============================================================
+         Tab pages. Exactly one .page is visible at a time; the tab
+         bar at the bottom of the screen decides which one.
+         ============================================================ -->
 
-    <!-- Module 1b: tasks. Open tasks stick around until you finish them. -->
-    <section class="card">
-      <h2>Tasks</h2>
-      <form id="task-form" autocomplete="off">
-        <input id="new-task" placeholder="Add a task…" aria-label="New task">
-        <button type="submit" class="add-btn" aria-label="Add task">+</button>
-      </form>
-      <ul id="task-list" class="task-list"></ul>
-      <p id="task-empty" class="muted small">Nothing here — add whatever is on your plate.</p>
-    </section>
+    <!-- ☀️ TODAY — the daily landing page -->
+    <div id="page-today" class="page active">
 
-    <!-- A small look back: the last 7 days of check-ins. -->
-    <section class="card">
-      <h2>Last 7 days</h2>
-      <div id="week" class="week"></div>
-    </section>
+      <!-- Reminders due today (or overdue) tap you on the shoulder here. -->
+      <section id="due-card" class="card due-card" hidden>
+        <h2>⏰ Don't forget</h2>
+        <ul id="due-list" class="task-list"></ul>
+      </section>
+
+      <!-- Module 1a: the daily check-in. Ten seconds a day; it adds up. -->
+      <section class="card">
+        <h2>Daily check-in</h2>
+        <div id="mood-row" class="mood-row" role="group" aria-label="How are you feeling today?"></div>
+        <ul id="habit-list" class="habit-list"></ul>
+        <div class="habit-tools">
+          <button id="goto-habits" class="link-btn" type="button">Edit on the Habits tab →</button>
+        </div>
+        <input id="note" class="note" placeholder="One line about today…" maxlength="200" autocomplete="off">
+      </section>
+
+      <!-- Module 1b: tasks. Open tasks stick around until you finish them. -->
+      <section class="card">
+        <h2>Tasks</h2>
+        <form id="task-form" autocomplete="off">
+          <input id="new-task" placeholder="Add a task…" aria-label="New task">
+          <button type="submit" class="add-btn" aria-label="Add task">+</button>
+        </form>
+        <ul id="task-list" class="task-list"></ul>
+        <p id="task-empty" class="muted small">Nothing here — add whatever is on your plate.</p>
+      </section>
+
+      <!-- A small look back: the last 7 days of check-ins. -->
+      <section class="card">
+        <h2>Last 7 days</h2>
+        <div id="week" class="week"></div>
+      </section>
+    </div>
+
+    <!-- ⏰ REMINDERS — things with a "when" attached -->
+    <div id="page-reminders" class="page">
+      <section class="card">
+        <h2>New reminder</h2>
+        <form id="reminder-form" autocomplete="off">
+          <input id="new-reminder" placeholder="Remind me to…" aria-label="New reminder">
+          <button type="submit" class="add-btn" aria-label="Add reminder">+</button>
+        </form>
+        <label class="date-row">
+          <span class="muted small">When (optional):</span>
+          <input type="date" id="new-reminder-date" aria-label="Reminder date">
+        </label>
+      </section>
+
+      <section class="card">
+        <h2>Your reminders</h2>
+        <div id="reminder-groups"></div>
+        <p id="reminder-empty" class="muted small">No reminders yet — future-you says hi. 👋</p>
+      </section>
+    </div>
+
+    <!-- 🌱 HABITS — the person you're becoming, one tick at a time -->
+    <div id="page-habits" class="page">
+      <section class="card">
+        <h2>My habits</h2>
+        <p class="muted small hint">Everything here shows up on Today as a daily checkbox. Small and repeatable beats big and abandoned.</p>
+        <form id="habit-form" autocomplete="off">
+          <input id="new-habit" placeholder="Add a habit…" aria-label="New habit">
+          <button type="submit" class="add-btn" aria-label="Add habit">+</button>
+        </form>
+        <ul id="habit-manage" class="habit-manage"></ul>
+        <p id="habit-empty" class="muted small" hidden>No habits yet — start with one tiny one.</p>
+      </section>
+    </div>
 
     <footer class="foot">
       <span class="muted small">Hub · made by Megan (with Claude)</span>
@@ -58,7 +108,16 @@
 
   </main>
 
+  <!-- The bottom tab bar (fixed to the screen, not the page). -->
+  <nav class="tabbar" aria-label="Hub sections">
+    <button class="tab-btn active" data-tab="today" type="button" aria-current="page">☀️<span>Today</span></button>
+    <button class="tab-btn" data-tab="reminders" type="button">⏰<span>Reminders</span><span id="reminder-badge" class="badge" hidden></span></button>
+    <button class="tab-btn" data-tab="habits" type="button">🌱<span>Habits</span></button>
+  </nav>
+
   <script src="storage.js"></script>
+  <script src="reminders.js"></script>
+  <script src="habits.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
