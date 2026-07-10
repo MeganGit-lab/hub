@@ -1,6 +1,6 @@
 # Hub
 
-Megan's personal daily hub. One page, opened every day: how I'm doing, what I need to do, and a growing record of my days.
+Megan's personal daily hub, opened every day. Two jobs, one app: remind me of my chores and errands — and give me a place to write about how I'm feeling, keep the promises I've made to myself, and encourage myself to make my life better.
 
 Started July 8, 2026, built with Claude (Fable 5).
 
@@ -28,7 +28,7 @@ Everything is saved inside the browser (localStorage) — not in this folder. Tw
 | `styles.css` | How it looks — colors, spacing, dark mode |
 | `app.js` | The Today tab, the bottom tab bar, and shared helpers |
 | `reminders.js` | The ⏰ Reminders tab (and the "Don't forget" card on Today) |
-| `habits.js` | The 🌱 Habits tab — manage habits, whys, streaks |
+| `habits.js` | The 🌱 Habits tab — habits, whys, streaks, and My commitments |
 | `storage.js` | How data is saved — the only file that touches storage |
 
 That's the module pattern: each new tab is its own small file. Money and Journal will join the same way.
@@ -40,6 +40,7 @@ Change your name in the greeting at the top of `app.js` (`const OWNER = ...`).
 - [x] **v1 — Today page**: tasks, mood, habits, daily note, streak, 7-day view *(July 8, 2026)*
 - [x] **Phase 2a — Get it online**: Hub lives at <https://megangit-lab.github.io/hub/> (GitHub Pages, free). Learned git: the project's history now lives at <https://github.com/MeganGit-lab/hub> *(July 9, 2026)*
 - [x] **v1.1 — Tabs**: bottom tab bar. ⏰ Reminders (dated reminders that surface on Today and count on the tab button) and 🌱 Habits (add/rename/remove, a "why" for each, 7-day dots, per-habit streaks) *(July 10, 2026)*
+- [x] **v1.2 — My commitments**: a list on the Habits tab of the things I'm committed to improving, each with a "since" date *(July 10, 2026)*
 - [ ] **Phase 2b — Cloud sync**: one shared account so phone + PC see the same data automatically
 - [ ] **Module 2 — Money**: quick expense logging, monthly picture
 - [ ] **Module 3 — Journal**: the daily one-liner grows into real entries, searchable

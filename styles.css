@@ -204,13 +204,13 @@ h1 {
 
 /* ---------- tasks ---------- */
 
-#task-form, #reminder-form, #habit-form {
+#task-form, #reminder-form, #habit-form, #commit-form {
   display: flex;
   gap: 8px;
   margin-bottom: 8px;
 }
 
-#new-task, #new-reminder, #new-habit {
+#new-task, #new-reminder, #new-habit, #new-commit {
   flex: 1;
   font-size: 1rem;
   padding: 11px 12px;
@@ -529,6 +529,41 @@ li.done .task-text {
 .dot.filled { background: var(--good); }
 
 .h-streak { font-size: 0.78rem; color: var(--muted); }
+
+/* ---------- commitments ---------- */
+
+.commit-list {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.commit-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.commit-list li:last-child { border-bottom: none; }
+
+.commit-mark {
+  color: var(--accent);
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+
+.commit-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.commit-text { overflow-wrap: anywhere; }
+
+.commit-since { font-size: 0.72rem; color: var(--muted); }
 
 /* ---------- focus ---------- */
 

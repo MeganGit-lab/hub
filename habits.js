@@ -97,6 +97,62 @@ function renderHabitsPage() {
     li.append(row, why, stats);
     list.appendChild(li);
   });
+
+  renderCommitments();
+}
+
+/* ---------- my commitments ---------- */
+
+// A commitment is { id, text, day } — `day` is when you made it,
+// so each one quietly shows how long you've been keeping it.
+
+// "2026-07-10" → "10 Jul" (adds the year once it isn't this year).
+function shortDate(key) {
+  const [y, m, d] = key.split("-").map(Number);
+  const opts = { month: "short", day: "numeric" };
+  if (y !== new Date().getFullYear()) opts.year = "numeric";
+  return new Date(y, m - 1, d).toLocaleDateString(undefined, opts);
+}
+
+function renderCommitments() {
+  const list = $("#commit-list");
+  list.innerHTML = "";
+  $("#commit-empty").hidden = data.commitments.length > 0;
+
+  data.commitments.forEach((c) => {
+    const li = document.createElement("li");
+
+    const mark = document.createElement("span");
+    mark.className = "commit-mark";
+    mark.textContent = "✦";
+
+    const body = document.createElement("div");
+    body.className = "commit-body";
+    const text = document.createElement("span");
+    text.className = "commit-text";
+    text.textContent = c.text;
+    body.appendChild(text);
+    if (c.day) {
+      const since = document.createElement("span");
+      since.className = "commit-since";
+      since.textContent = `since ${shortDate(c.day)}`;
+      body.appendChild(since);
+    }
+
+    const del = document.createElement("button");
+    del.className = "del";
+    del.textContent = "✕";
+    del.setAttribute("aria-label", `Remove commitment: ${c.text}`);
+    del.onclick = () => {
+      if (confirm(`Let go of "${c.text}"?`)) {
+        data.commitments = data.commitments.filter((x) => x.id !== c.id);
+        saveAndRender();
+      }
+    };
+
+    li.append(mark, body, del);
+    list.appendChild(li);
+  });
 }
 
 /* ---------- wiring (called once, from app.js startup) ---------- */
@@ -108,6 +164,17 @@ function setupHabits() {
     const nm = input.value.trim();
     if (!nm) return;
     data.habits.push({ id: makeId(), name: nm, why: "" });
+    input.value = "";
+    saveAndRender();
+    input.focus();
+  });
+
+  $("#commit-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const input = $("#new-commit");
+    const text = input.value.trim();
+    if (!text) return;
+    data.commitments.push({ id: makeId(), text, day: Storage.todayKey() });
     input.value = "";
     saveAndRender();
     input.focus();

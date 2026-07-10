@@ -94,6 +94,18 @@
         <ul id="habit-manage" class="habit-manage"></ul>
         <p id="habit-empty" class="muted small" hidden>No habits yet — start with one tiny one.</p>
       </section>
+
+      <!-- Not chores, not checkboxes — the promises you keep to yourself. -->
+      <section class="card">
+        <h2>My commitments</h2>
+        <p class="muted small hint">The things you're committed to improving, in your own words. They live here so you read them often.</p>
+        <form id="commit-form" autocomplete="off">
+          <input id="new-commit" placeholder="I'm committed to…" aria-label="New commitment">
+          <button type="submit" class="add-btn" aria-label="Add commitment">+</button>
+        </form>
+        <ul id="commit-list" class="commit-list"></ul>
+        <p id="commit-empty" class="muted small" hidden>Nothing yet — what's one thing future-you will thank you for?</p>
+      </section>
     </div>
 
     <footer class="foot">

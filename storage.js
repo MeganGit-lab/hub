@@ -9,7 +9,8 @@
      tasks:     [ { id, text, done, createdDay, doneDay } ],
      reminders: [ { id, text, date: "YYYY-MM-DD" or "", done, doneDay } ],
      days:      { "2026-07-08": { mood: 0-4 or null, habits: {habitId: true}, note: "" } },
-     habits:    [ { id, name, why } ]
+     habits:    [ { id, name, why } ],
+     commitments: [ { id, text, day } ]
    }
 
    Keeping ALL reading/writing in this file means that later,
@@ -30,6 +31,7 @@ const Storage = {
       version: 1,
       tasks: [],
       reminders: [],
+      commitments: [],
       days: {},
       habits: [
         { id: makeId(), name: "Move my body" },
@@ -60,6 +62,7 @@ const Storage = {
   normalize(data) {
     if (!Array.isArray(data.habits)) data.habits = [];
     if (!Array.isArray(data.reminders)) data.reminders = [];
+    if (!Array.isArray(data.commitments)) data.commitments = [];
     return data;
   },
 
