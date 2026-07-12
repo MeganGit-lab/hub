@@ -5,50 +5,56 @@
    system setting.
    ============================================================ */
 
+/* The "dreamy pastels" palette: a lavender-to-peach morning sky
+   with white cards floating on it. Every colour in the app comes
+   from these variables — change them, and Hub changes outfit. */
 :root {
-  --bg: #f6f1ea;
-  --card: #fffdf9;
-  --ink: #2e2822;
-  --muted: #8a8177;
-  --line: #e8e0d5;
-  --accent: #bc5f38;
-  --accent-soft: #f5e3da;
-  --good: #4c8b5d;
-  --bad: #b3453a;
-  --bad-soft: #f7e1de;
-  --accent-deep: #a34a28;
-  --bg-top: #fbe9d6;
+  --bg-top: #e6d9f8;    /* lavender, the top of the sky */
+  --bg-mid: #f9dcea;    /* pink, the middle */
+  --bg: #fdeee2;        /* peach, where the sky settles */
+  --card: #ffffff;
+  --ink: #43395c;
+  --muted: #7f7398;
+  --line: #eadef4;
+  --accent: #b0548f;    /* orchid pink */
+  --accent-deep: #8f3d76;
+  --accent-soft: #f8e2f0;
+  --good: #3f8a63;
+  --bad: #c9506b;
+  --bad-soft: #fbdfe7;
   /* Each tab has its own colour family. */
-  --c-today: #d9922e;
-  --c-today-soft: #faedd6;
-  --c-rem: #d96c57;
-  --c-rem-soft: #f9e2dd;
-  --c-hab: #4c8b5d;
-  --c-hab-soft: #e0efe4;
-  --shadow: 0 1px 3px rgba(46, 40, 34, 0.08), 0 4px 16px rgba(46, 40, 34, 0.06);
+  --c-today: #a86f15;
+  --c-today-soft: #fdf0d4;
+  --c-rem: #c95b6c;
+  --c-rem-soft: #fbe1de;
+  --c-hab: #3f8a63;
+  --c-hab-soft: #ddf2e5;
+  --shadow: 0 1px 3px rgba(96, 70, 140, 0.08), 0 4px 16px rgba(96, 70, 140, 0.08);
 }
 
+/* Dark mode: a deep indigo night with plum-tinted cards. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #1b1815;
-    --card: #262220;
-    --ink: #ece5dc;
-    --muted: #9a9086;
-    --line: #3a342f;
-    --accent: #e0855c;
-    --accent-soft: #3d2c24;
-    --good: #7cb98d;
-    --bad: #e08072;
-    --bad-soft: #4a2b26;
-    --accent-deep: #c96a41;
-    --bg-top: #272019;
+    --bg-top: #322a55;
+    --bg-mid: #262047;
+    --bg: #1d1936;
+    --card: #2a2449;
+    --ink: #eae4f8;
+    --muted: #a99ecb;
+    --line: #3f3766;
+    --accent: #dd8fc7;
+    --accent-deep: #b76aa4;
+    --accent-soft: #45305a;
+    --good: #83cba0;
+    --bad: #ec92ab;
+    --bad-soft: #4c2b41;
     --c-today: #eec27a;
-    --c-today-soft: #3b2f1c;
-    --c-rem: #e08a75;
-    --c-rem-soft: #46281f;
-    --c-hab: #86c497;
-    --c-hab-soft: #23372a;
-    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --c-today-soft: #423a2e;
+    --c-rem: #f09a8c;
+    --c-rem-soft: #4a2f38;
+    --c-hab: #8ed3aa;
+    --c-hab-soft: #29413a;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
   }
 }
 
@@ -60,8 +66,8 @@ html, body {
 }
 
 body {
-  /* A soft warm glow at the top that settles into the base colour. */
-  background: linear-gradient(180deg, var(--bg-top), var(--bg) 340px);
+  /* The sky: lavender up top, pink in the middle, settling into peach. */
+  background: linear-gradient(180deg, var(--bg-top), var(--bg-mid) 300px, var(--bg) 640px);
   color: var(--ink);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   line-height: 1.45;
@@ -621,7 +627,7 @@ li.done .task-text {
 @keyframes wiggle { 0%, 88%, 100% { transform: rotate(0); } 91% { transform: rotate(12deg); } 94% { transform: rotate(-10deg); } 97% { transform: rotate(6deg); } }
 @keyframes pop { 0% { transform: scale(0.5); } 60% { transform: scale(1.25); } 100% { transform: scale(1); } }
 @keyframes flicker { 0%, 100% { transform: scale(1) rotate(-2deg); } 50% { transform: scale(1.12) rotate(2deg); } }
-@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(224, 133, 92, 0.6); } 70%, 100% { box-shadow: 0 0 0 8px rgba(224, 133, 92, 0); } }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(203, 110, 172, 0.55); } 70%, 100% { box-shadow: 0 0 0 8px rgba(203, 110, 172, 0); } }
 @keyframes spark-fly {
   0% { transform: translate(0, 0) scale(0.5); opacity: 1; }
   100% { transform: translate(var(--dx), var(--dy)) scale(1.2); opacity: 0; }
@@ -630,7 +636,11 @@ li.done .task-text {
 .hero-emoji { display: inline-block; font-size: 1.3rem; animation: floaty 4s ease-in-out infinite; }
 
 /* The daily line of encouragement under the greeting. */
-.cheer { margin: 4px 0 0; font-size: 0.85rem; font-style: italic; color: var(--accent); }
+.cheer { margin: 4px 0 0; font-size: 0.85rem; font-style: italic; color: var(--accent-deep); }
+/* In the dark the deep shade vanishes — use the bright orchid instead. */
+@media (prefers-color-scheme: dark) {
+  .cheer { color: var(--accent); }
+}
 
 /* The streak buddy: a seed that grows with your streak (app.js
    picks the emoji). It bobs along next to the flame. */
