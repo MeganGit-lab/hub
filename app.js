@@ -17,6 +17,23 @@ const OWNER = "Megan";
 
 const MOODS = ["😞", "😕", "😐", "🙂", "😄"];
 
+// One line of encouragement a day — picked by the date, so it
+// stays the same all day, like a note left on the fridge.
+const CHEERS = [
+  "Small steps still count as steps 💛",
+  "You showed up today. That's the whole trick ✨",
+  "Be the person your commitments think you are 🌟",
+  "Tiny progress is still progress 🐢",
+  "Future-you is watching, and she's proud 🥰",
+  "One thing at a time — that's how everything gets done 🌱",
+  "Your streak believes in you 🔥",
+  "Rest counts too. Be kind to yourself today ☁️",
+  "You've done hard things before. Today is easier 💪",
+  "A gentle day is still a good day 🌸",
+  "Look at you, tending your little life garden 🌻",
+  "Drink some water. Love, Hub 💧",
+];
+
 let data = Storage.load();
 
 const $ = (sel) => document.querySelector(sel);
@@ -30,6 +47,24 @@ function saveAndRender() {
   render();
 }
 
+// A tiny celebration: emoji sparks fly out from (x, y) and fade.
+// Purely cosmetic — they live outside the app's cards, so the
+// redraw in saveAndRender never touches them.
+function burst(x, y, emojis, count = 6) {
+  for (let i = 0; i < count; i++) {
+    const s = document.createElement("span");
+    s.className = "spark";
+    s.textContent = emojis[i % emojis.length];
+    s.style.left = x + "px";
+    s.style.top = y + "px";
+    s.style.setProperty("--dx", Math.round(Math.random() * 140 - 70) + "px");
+    s.style.setProperty("--dy", Math.round(-40 - Math.random() * 90) + "px");
+    s.style.animationDelay = Math.random() * 0.12 + "s";
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1000);
+  }
+}
+
 /* ---------- header ---------- */
 
 function renderHeader() {
@@ -37,6 +72,8 @@ function renderHeader() {
   const part = h < 5 ? "night" : h < 12 ? "morning" : h < 18 ? "afternoon" : "evening";
   $("#greeting").textContent =
     part === "night" ? `Up late, ${OWNER}?` : `Good ${part}, ${OWNER}`;
+  $("#hero-emoji").textContent =
+    { night: "🌙", morning: "🌅", afternoon: "☀️", evening: "🌆" }[part];
 
   $("#date-line").textContent = new Date().toLocaleDateString(undefined, {
     weekday: "long",
@@ -44,7 +81,23 @@ function renderHeader() {
     day: "numeric",
   });
 
-  $("#streak").textContent = `🔥 ${computeStreak()}`;
+  // Same date → same number → same cheer, all day long.
+  const seed = [...Storage.todayKey()].reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+  $("#cheer").textContent = CHEERS[seed % CHEERS.length];
+
+  const streak = computeStreak();
+  $("#streak").innerHTML = `<span class="flame">🔥</span> ${streak}`;
+
+  // The streak buddy: a seed that grows as your streak does.
+  const [face, story] =
+    streak >= 30 ? ["🌸", "A month strong — full bloom!"] :
+    streak >= 14 ? ["🌳", "Two weeks of showing up. Sturdy."] :
+    streak >= 7  ? ["🪴", "A whole week! Look at it thrive."] :
+    streak >= 3  ? ["🌿", "It's putting out leaves now."] :
+    streak >= 1  ? ["🌱", "Something's sprouting…"] :
+                   ["🌰", "A seed, waiting for today's check-in."];
+  $("#buddy").textContent = face;
+  $("#buddy").title = `Your streak buddy — it grows with your streak. ${story}`;
 }
 
 // A day "counts" if you set a mood, ticked a habit, or wrote a note.
@@ -83,7 +136,12 @@ function renderMood() {
     btn.setAttribute("aria-pressed", rec.mood === i);
     btn.setAttribute("aria-label", `Mood ${i + 1} of 5`);
     btn.onclick = () => {
-      rec.mood = rec.mood === i ? null : i; // tap again to clear
+      const selecting = rec.mood !== i;
+      rec.mood = selecting ? i : null; // tap again to clear
+      if (selecting) {
+        const r = btn.getBoundingClientRect();
+        burst(r.left + r.width / 2, r.top + 6, [emoji, "✨"]);
+      }
       saveAndRender();
     };
     row.appendChild(btn);
@@ -106,6 +164,15 @@ function renderHabits() {
     box.checked = done;
     box.onchange = () => {
       rec.habits[habit.id] = box.checked;
+      if (box.checked) {
+        const r = box.getBoundingClientRect();
+        burst(r.left + 10, r.top, ["✨", "🌟"]);
+        // Ticked the very last one? That deserves confetti.
+        if (data.habits.every((hb) => rec.habits[hb.id])) {
+          const c = list.getBoundingClientRect();
+          burst(c.left + c.width / 2, c.top + 30, ["🎉", "✨", "🎊"], 12);
+        }
+      }
       saveAndRender();
     };
     const name = document.createElement("span");
@@ -151,6 +218,10 @@ function renderTasks() {
     tick.onclick = () => {
       task.done = !task.done;
       task.doneDay = task.done ? Storage.todayKey() : null;
+      if (task.done) {
+        const r = tick.getBoundingClientRect();
+        burst(r.left + 12, r.top, ["✨", "⭐"]);
+      }
       saveAndRender();
     };
 
@@ -194,7 +265,7 @@ function renderWeek() {
 
     const mood = document.createElement("div");
     const hasMood = rec && rec.mood !== null && rec.mood !== undefined;
-    mood.className = "mood" + (hasMood ? "" : " empty");
+    mood.className = "mood" + (hasMood ? " m" + rec.mood : " empty");
     mood.textContent = hasMood ? MOODS[rec.mood] : "·";
 
     const habitsDone = rec ? Object.values(rec.habits || {}).filter(Boolean).length : 0;

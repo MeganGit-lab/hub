@@ -176,6 +176,10 @@ function setupHabits() {
     if (!text) return;
     data.commitments.push({ id: makeId(), text, day: Storage.todayKey() });
     input.value = "";
+    // A new promise to yourself deserves a little gold. ✦
+    const btn = e.target.querySelector(".add-btn");
+    const rect = btn.getBoundingClientRect();
+    burst(rect.left + rect.width / 2, rect.top, ["✦", "✨"]);
     saveAndRender();
     input.focus();
   });

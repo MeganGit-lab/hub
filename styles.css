@@ -16,6 +16,15 @@
   --good: #4c8b5d;
   --bad: #b3453a;
   --bad-soft: #f7e1de;
+  --accent-deep: #a34a28;
+  --bg-top: #fbe9d6;
+  /* Each tab has its own colour family. */
+  --c-today: #d9922e;
+  --c-today-soft: #faedd6;
+  --c-rem: #d96c57;
+  --c-rem-soft: #f9e2dd;
+  --c-hab: #4c8b5d;
+  --c-hab-soft: #e0efe4;
   --shadow: 0 1px 3px rgba(46, 40, 34, 0.08), 0 4px 16px rgba(46, 40, 34, 0.06);
 }
 
@@ -31,6 +40,14 @@
     --good: #7cb98d;
     --bad: #e08072;
     --bad-soft: #4a2b26;
+    --accent-deep: #c96a41;
+    --bg-top: #272019;
+    --c-today: #eec27a;
+    --c-today-soft: #3b2f1c;
+    --c-rem: #e08a75;
+    --c-rem-soft: #46281f;
+    --c-hab: #86c497;
+    --c-hab-soft: #23372a;
     --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   }
 }
@@ -43,7 +60,8 @@ html, body {
 }
 
 body {
-  background: var(--bg);
+  /* A soft warm glow at the top that settles into the base colour. */
+  background: linear-gradient(180deg, var(--bg-top), var(--bg) 340px);
   color: var(--ink);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   line-height: 1.45;
@@ -91,6 +109,8 @@ h1 {
 .card {
   background: var(--card);
   border: 1px solid var(--line);
+  /* Each tab paints this top edge in its own colour (see below). */
+  border-top: 3px solid var(--line);
   border-radius: 16px;
   box-shadow: var(--shadow);
   padding: 16px;
@@ -132,7 +152,7 @@ h1 {
   transition: transform 0.1s ease, opacity 0.1s ease;
 }
 
-.mood-btn:hover { transform: scale(1.12); opacity: 0.9; }
+.mood-btn:hover { transform: scale(1.12) rotate(6deg); opacity: 0.9; }
 
 .mood-btn.selected {
   filter: none;
@@ -225,7 +245,7 @@ h1 {
   font-size: 1.4rem;
   border: none;
   border-radius: 12px;
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
   color: #fff;
   cursor: pointer;
 }
@@ -388,7 +408,8 @@ li.done .task-text {
   opacity: 0.7;
 }
 
-.tab-btn span { font-size: 0.68rem; letter-spacing: 0.02em; }
+.tab-ico { display: inline-block; }
+.tab-label { font-size: 0.68rem; letter-spacing: 0.02em; }
 
 .tab-btn.active {
   background: var(--accent-soft);
@@ -564,6 +585,79 @@ li.done .task-text {
 .commit-text { overflow-wrap: anywhere; }
 
 .commit-since { font-size: 0.72rem; color: var(--muted); }
+
+/* ============================================================
+   The delight layer: colour per tab, the streak buddy, and the
+   little emoji animations. All plain CSS — the only JS involved
+   is the spark helper in app.js that drops .spark elements.
+   ============================================================ */
+
+/* Today is golden, Reminders warm coral, Habits leafy green. */
+#page-today .card { border-top-color: var(--c-today); }
+#page-today .card h2 { color: var(--c-today); }
+#page-today .due-card { border-color: var(--accent); }
+#page-reminders .card { border-top-color: var(--c-rem); }
+#page-reminders .card h2 { color: var(--c-rem); }
+#page-habits .card { border-top-color: var(--c-hab); }
+#page-habits .card h2 { color: var(--c-hab); }
+
+.tab-btn { transition: background 0.2s, color 0.2s, filter 0.2s; }
+.tab-btn[data-tab="today"].active { background: var(--c-today-soft); color: var(--c-today); }
+.tab-btn[data-tab="reminders"].active { background: var(--c-rem-soft); color: var(--c-rem); }
+.tab-btn[data-tab="habits"].active { background: var(--c-hab-soft); color: var(--c-hab); }
+
+/* The week strip becomes a little mood heat map. */
+.week .mood { border-radius: 8px; }
+.week .mood.m0 { background: var(--bad-soft); }
+.week .mood.m1 { background: var(--c-rem-soft); }
+.week .mood.m2 { background: var(--c-today-soft); }
+.week .mood.m3 { background: var(--c-hab-soft); }
+.week .mood.m4 { background: var(--c-hab-soft); box-shadow: inset 0 0 0 2px var(--good); }
+
+/* ---------- the moving parts ---------- */
+
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes floaty { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-5px) rotate(3deg); } }
+@keyframes wiggle { 0%, 88%, 100% { transform: rotate(0); } 91% { transform: rotate(12deg); } 94% { transform: rotate(-10deg); } 97% { transform: rotate(6deg); } }
+@keyframes pop { 0% { transform: scale(0.5); } 60% { transform: scale(1.25); } 100% { transform: scale(1); } }
+@keyframes flicker { 0%, 100% { transform: scale(1) rotate(-2deg); } 50% { transform: scale(1.12) rotate(2deg); } }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(224, 133, 92, 0.6); } 70%, 100% { box-shadow: 0 0 0 8px rgba(224, 133, 92, 0); } }
+@keyframes spark-fly {
+  0% { transform: translate(0, 0) scale(0.5); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(1.2); opacity: 0; }
+}
+
+.hero-emoji { display: inline-block; font-size: 1.3rem; animation: floaty 4s ease-in-out infinite; }
+
+/* The daily line of encouragement under the greeting. */
+.cheer { margin: 4px 0 0; font-size: 0.85rem; font-style: italic; color: var(--accent); }
+
+/* The streak buddy: a seed that grows with your streak (app.js
+   picks the emoji). It bobs along next to the flame. */
+.top-right { display: flex; align-items: center; gap: 8px; }
+.buddy { font-size: 1.5rem; line-height: 1; display: inline-block; animation: bob 3s ease-in-out infinite; cursor: help; }
+
+.streak .flame { display: inline-block; animation: flicker 1.6s ease-in-out infinite; }
+.badge { animation: ping 2.2s ease-out infinite; }
+.wiggle-emoji { display: inline-block; animation: wiggle 3.5s ease-in-out infinite; }
+.float-emoji { display: inline-block; animation: floaty 3.5s ease-in-out infinite; }
+.mood-btn.selected { animation: pop 0.35s ease; }
+.tab-btn.active .tab-ico { animation: pop 0.35s ease; }
+.dot.filled { animation: pop 0.3s ease; }
+
+/* Emoji sparks that fly out when you tick something off. */
+.spark {
+  position: fixed;
+  z-index: 99;
+  font-size: 1rem;
+  pointer-events: none;
+  animation: spark-fly 0.8s ease-out forwards;
+}
+
+/* If your system asks for less motion, Hub sits still. */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
 
 /* ---------- focus ---------- */
 

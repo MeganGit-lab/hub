@@ -41,6 +41,7 @@ Change your name in the greeting at the top of `app.js` (`const OWNER = ...`).
 - [x] **Phase 2a — Get it online**: Hub lives at <https://megangit-lab.github.io/hub/> (GitHub Pages, free). Learned git: the project's history now lives at <https://github.com/MeganGit-lab/hub> *(July 9, 2026)*
 - [x] **v1.1 — Tabs**: bottom tab bar. ⏰ Reminders (dated reminders that surface on Today and count on the tab button) and 🌱 Habits (add/rename/remove, a "why" for each, 7-day dots, per-habit streaks) *(July 10, 2026)*
 - [x] **v1.2 — My commitments**: a list on the Habits tab of the things I'm committed to improving, each with a "since" date *(July 10, 2026)*
+- [x] **v1.3 — The delight layer**: colour per tab, a streak buddy that grows with your streak (🌰→🌱→🌿→🪴→🌳→🌸), emoji sparks when you tick things off, confetti for a full habit day, a daily line of encouragement, mood colours on the week strip *(July 13, 2026)*
 - [ ] **Phase 2b — Cloud sync**: one shared account so phone + PC see the same data automatically
 - [ ] **Module 2 — Money**: quick expense logging, monthly picture
 - [ ] **Module 3 — Journal**: the daily one-liner grows into real entries, searchable

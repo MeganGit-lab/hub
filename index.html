@@ -12,10 +12,14 @@
 
     <header class="top">
       <div>
-        <h1 id="greeting">Hello</h1>
+        <h1><span id="greeting">Hello</span> <span id="hero-emoji" class="hero-emoji"></span></h1>
         <p id="date-line" class="muted"></p>
+        <p id="cheer" class="cheer"></p>
       </div>
-      <div id="streak" class="streak" title="Days in a row you've checked in">🔥 0</div>
+      <div class="top-right">
+        <span id="buddy" class="buddy"></span>
+        <div id="streak" class="streak" title="Days in a row you've checked in">🔥 0</div>
+      </div>
     </header>
 
     <!-- ============================================================
@@ -28,7 +32,7 @@
 
       <!-- Reminders due today (or overdue) tap you on the shoulder here. -->
       <section id="due-card" class="card due-card" hidden>
-        <h2>⏰ Don't forget</h2>
+        <h2><span class="wiggle-emoji">⏰</span> Don't forget</h2>
         <ul id="due-list" class="task-list"></ul>
       </section>
 
@@ -51,7 +55,7 @@
           <button type="submit" class="add-btn" aria-label="Add task">+</button>
         </form>
         <ul id="task-list" class="task-list"></ul>
-        <p id="task-empty" class="muted small">Nothing here — add whatever is on your plate.</p>
+        <p id="task-empty" class="muted small"><span class="float-emoji">🎈</span> Nothing here — add whatever is on your plate.</p>
       </section>
 
       <!-- A small look back: the last 7 days of check-ins. -->
@@ -78,7 +82,7 @@
       <section class="card">
         <h2>Your reminders</h2>
         <div id="reminder-groups"></div>
-        <p id="reminder-empty" class="muted small">No reminders yet — future-you says hi. 👋</p>
+        <p id="reminder-empty" class="muted small">No reminders yet — future-you says hi. <span class="float-emoji">👋</span></p>
       </section>
     </div>
 
@@ -92,7 +96,7 @@
           <button type="submit" class="add-btn" aria-label="Add habit">+</button>
         </form>
         <ul id="habit-manage" class="habit-manage"></ul>
-        <p id="habit-empty" class="muted small" hidden>No habits yet — start with one tiny one.</p>
+        <p id="habit-empty" class="muted small" hidden><span class="float-emoji">🌱</span> No habits yet — start with one tiny one.</p>
       </section>
 
       <!-- Not chores, not checkboxes — the promises you keep to yourself. -->
@@ -104,12 +108,12 @@
           <button type="submit" class="add-btn" aria-label="Add commitment">+</button>
         </form>
         <ul id="commit-list" class="commit-list"></ul>
-        <p id="commit-empty" class="muted small" hidden>Nothing yet — what's one thing future-you will thank you for?</p>
+        <p id="commit-empty" class="muted small" hidden><span class="float-emoji">🌟</span> Nothing yet — what's one thing future-you will thank you for?</p>
       </section>
     </div>
 
     <footer class="foot">
-      <span class="muted small">Hub · made by Megan (with Claude)</span>
+      <span class="muted small">Hub · made by Megan (with Claude) 💛</span>
       <span class="small">
         <button id="export" class="link-btn" type="button">Backup</button>
         ·
@@ -122,9 +126,9 @@
 
   <!-- The bottom tab bar (fixed to the screen, not the page). -->
   <nav class="tabbar" aria-label="Hub sections">
-    <button class="tab-btn active" data-tab="today" type="button" aria-current="page">☀️<span>Today</span></button>
-    <button class="tab-btn" data-tab="reminders" type="button">⏰<span>Reminders</span><span id="reminder-badge" class="badge" hidden></span></button>
-    <button class="tab-btn" data-tab="habits" type="button">🌱<span>Habits</span></button>
+    <button class="tab-btn active" data-tab="today" type="button" aria-current="page"><span class="tab-ico">☀️</span><span class="tab-label">Today</span></button>
+    <button class="tab-btn" data-tab="reminders" type="button"><span class="tab-ico">⏰</span><span class="tab-label">Reminders</span><span id="reminder-badge" class="badge" hidden></span></button>
+    <button class="tab-btn" data-tab="habits" type="button"><span class="tab-ico">🌱</span><span class="tab-label">Habits</span></button>
   </nav>
 
   <script src="storage.js"></script>

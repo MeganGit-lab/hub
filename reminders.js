@@ -48,6 +48,10 @@ function reminderRow(r, showDate) {
   tick.onclick = () => {
     r.done = !r.done;
     r.doneDay = r.done ? today : null;
+    if (r.done) {
+      const rect = tick.getBoundingClientRect();
+      burst(rect.left + 12, rect.top, ["✨", "⭐"]);
+    }
     saveAndRender();
   };
 
